@@ -3,10 +3,9 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.*;
 import java.io.*;
-import java.util.*; // Este import trae java.util.ArrayList, etc.
+import java.util.*; 
 
 
-// Clase Nodo
 class Nodo {
     int valor;
     Nodo izquierda, derecha;
@@ -17,7 +16,6 @@ class Nodo {
     }
 }
 
-// Clase ArbolBinario
 class ArbolBinario {
     Nodo raiz;
 
@@ -25,7 +23,6 @@ class ArbolBinario {
         raiz = null;
     }
 
-    // Inserta un nuevo nodo en el árbol
     public void insertar(int valor) {
         raiz = insertarRecursivo(raiz, valor);
     }
@@ -42,7 +39,7 @@ class ArbolBinario {
         return nodo;
     }
 
-    // Elimina un nodo dado su valor
+ 
     public void eliminar(int valor) {
         raiz = eliminarRecursivo(raiz, valor);
     }
@@ -56,12 +53,12 @@ class ArbolBinario {
         } else if (valor > nodo.valor) {
             nodo.derecha = eliminarRecursivo(nodo.derecha, valor);
         } else {
-            // Caso de nodo con un solo hijo o sin hijos
+
             if (nodo.izquierda == null)
                 return nodo.derecha;
             if (nodo.derecha == null)
                 return nodo.izquierda;
-            // Caso de dos hijos: se reemplaza con el mínimo del subárbol derecho
+
             nodo.valor = minValor(nodo.derecha);
             nodo.derecha = eliminarRecursivo(nodo.derecha, nodo.valor);
         }
@@ -75,7 +72,6 @@ class ArbolBinario {
         return nodo.valor;
     }
 
-    // Búsqueda de un nodo
     public Nodo buscar(int valor) {
         return buscarRecursivo(raiz, valor);
     }
@@ -88,14 +84,14 @@ class ArbolBinario {
                                   : buscarRecursivo(nodo.derecha, valor);
     }
 
-    // Obtiene la altura (nivel) de un nodo; la raíz está en altura 1
+
     public int obtenerAltura(int valor) {
         return buscarAltura(raiz, valor, 1);
     }
 
     private int buscarAltura(Nodo nodo, int valor, int altura) {
         if (nodo == null) {
-            return -1; // No se encontró el nodo
+            return -1; 
         }
         if (nodo.valor == valor) {
             return altura;
@@ -104,7 +100,6 @@ class ArbolBinario {
                                   : buscarAltura(nodo.derecha, valor, altura + 1);
     }
 
-    // Métodos para realizar recorridos y recopilar nodos en una lista (usamos java.util.List y ArrayList)
     public java.util.List<Integer> preOrdenCollect() {
         java.util.List<Integer> lista = new java.util.ArrayList<>();
         preOrdenRec(raiz, lista);
@@ -147,7 +142,7 @@ class ArbolBinario {
         }
     }
 
-    // Métodos para retornar recorridos en forma de cadena
+
     public String preOrden() {
         return preOrdenCollect().toString();
     }
@@ -165,10 +160,10 @@ class ArbolBinario {
     }
 }
 
-// Panel para dibujar el árbol gráficamente
+
 class ArbolPanel extends JPanel {
     private ArbolBinario arbol;
-    private int highlightValue = -1; // Nodo resaltado (por ejemplo, en búsquedas o animación)
+    private int highlightValue = -1; 
 
     public ArbolPanel(ArbolBinario arbol) {
         this.arbol = arbol;
@@ -189,7 +184,7 @@ class ArbolPanel extends JPanel {
 
     private void dibujarArbol(Graphics g, Nodo nodo, int x, int y, int espaciado) {
         if (nodo != null) {
-            // Nodo resaltado se pinta en rojo
+
             g.setColor(nodo.valor == highlightValue ? Color.RED : Color.BLACK);
             g.fillOval(x - 15, y - 15, 30, 30);
             g.setColor(Color.WHITE);
@@ -208,7 +203,6 @@ class ArbolPanel extends JPanel {
     }
 }
 
-// Clase para la interfaz gráfica y operaciones
 class ArbolGUI extends JFrame {
     private ArbolBinario arbol;
     private JTextField inputValor;
@@ -217,10 +211,10 @@ class ArbolGUI extends JFrame {
 
     public ArbolGUI() {
         try {
-            // Aplicar LookAndFeel del sistema
+
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ex) {
-            // Si falla, se sigue con el LookAndFeel por defecto
+
         }
 
         arbol = new ArbolBinario();
@@ -229,7 +223,6 @@ class ArbolGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
 
-        // Panel de controles con diseño mejorado
         JPanel panelControl = new JPanel();
         panelControl.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         panelControl.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -256,7 +249,7 @@ class ArbolGUI extends JFrame {
         panelControl.add(btnGuardarResultados);
         add(panelControl, BorderLayout.NORTH);
 
-        // Área de salida para mostrar resultados
+
         outputArea = new JTextArea(10, 60);
         outputArea.setEditable(false);
         outputArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
@@ -264,12 +257,12 @@ class ArbolGUI extends JFrame {
         scrollSalida.setBorder(new EmptyBorder(10, 10, 10, 10));
         add(scrollSalida, BorderLayout.SOUTH);
 
-        // Panel para el árbol gráfico
+
         panelArbol = new ArbolPanel(arbol);
         panelArbol.setBorder(new EmptyBorder(10, 10, 10, 10));
         add(panelArbol, BorderLayout.CENTER);
 
-        // Acciones de botones
+
         btnInsertar.addActionListener(e -> insertarValor());
         btnEliminar.addActionListener(e -> eliminarValor());
         btnBuscar.addActionListener(e -> buscarValor());
@@ -320,7 +313,6 @@ class ArbolGUI extends JFrame {
         }
     }
 
-    // Método para animar el recorrido seleccionado resaltando cada nodo
     private void animarRecorrido(String tipo) {
         java.util.List<Integer> recorrido;
         switch (tipo) {
@@ -336,10 +328,10 @@ class ArbolGUI extends JFrame {
             default:
                 recorrido = new java.util.ArrayList<>();
         }
-        // Mostrar el resultado completo en el área de salida
+
         outputArea.append(tipo + ": " + recorrido.toString() + "\n");
 
-        // Usamos javax.swing.Timer para la animación (evitando ambigüedad con java.util.Timer)
+
         javax.swing.Timer timer = new javax.swing.Timer(700, null);
         final int[] index = {0};
         timer.addActionListener(new ActionListener() {
@@ -351,7 +343,7 @@ class ArbolGUI extends JFrame {
                     index[0]++;
                 } else {
                     timer.stop();
-                    // Quita el resaltado al terminar
+
                     panelArbol.setHighlightValue(-1);
                     panelArbol.repaint();
                 }
@@ -360,7 +352,6 @@ class ArbolGUI extends JFrame {
         timer.start();
     }
 
-    // Cargar archivo de texto con números separados por coma (o espacios)
     private void cargarArchivo() {
         JFileChooser fileChooser = new JFileChooser();
         int seleccion = fileChooser.showOpenDialog(this);
@@ -387,7 +378,7 @@ class ArbolGUI extends JFrame {
         }
     }
 
-    // Guarda el contenido del área de salida en un archivo de texto
+
     private void guardarResultados() {
         JFileChooser fileChooser = new JFileChooser();
         int seleccion = fileChooser.showSaveDialog(this);
